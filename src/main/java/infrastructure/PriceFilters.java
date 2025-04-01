@@ -11,8 +11,6 @@ public record PriceFilters(
     long brandIdentifier
 ) {
 
-  public PriceFilters{}
-
   public LocalDateTime toDomain() {
     return applicationDate;
   }

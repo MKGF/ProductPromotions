@@ -1,5 +1,3 @@
 package domain;
 
-public class NotDesambiguableException extends PriceException {
-
-}
+public class NotDesambiguableException extends PriceException {}

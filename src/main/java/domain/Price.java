@@ -12,7 +12,7 @@ public class Price implements Comparable<Price> {
 
   private Integer listing;
 
-  private Integer priority;
+  private final Integer priority;
 
   private BigDecimal amount;
 

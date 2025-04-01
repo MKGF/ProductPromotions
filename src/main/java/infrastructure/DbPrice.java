@@ -53,66 +53,6 @@ public class DbPrice {
     this.listing = 0L;
   }
 
-  public Long getBrand() {
-    return brandId;
-  }
-
-  public LocalDateTime getStartDate() {
-    return startDate;
-  }
-
-  public LocalDateTime getEndDate() {
-    return endDate;
-  }
-
-  public Long getListing() {
-    return listing;
-  }
-
-  public Long getProduct() {
-    return productId;
-  }
-
-  public Integer getPriority() {
-    return priority;
-  }
-
-  public BigDecimal getAmount() {
-    return amount;
-  }
-
-  public Currency getCurrency() {
-    return currency;
-  }
-
-  public void setBrand(Long brandId) {
-    this.brandId = brandId;
-  }
-
-  public void setStartDate(LocalDateTime startDate) {
-    this.startDate = startDate;
-  }
-
-  public void setEndDate(LocalDateTime endDate) {
-    this.endDate = endDate;
-  }
-
-  public void setProduct(Long productId) {
-    this.productId = productId;
-  }
-
-  public void setPriority(Integer priority) {
-    this.priority = priority;
-  }
-
-  public void setAmount(BigDecimal amount) {
-    this.amount = amount;
-  }
-
-  public void setCurrency(Currency currency) {
-    this.currency = currency;
-  }
-
   public Price toDomain() {
     return new Price(this.startDate, this.endDate, Math.toIntExact(this.listing), this.priority, this.amount, this.currency);
   }
