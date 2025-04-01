@@ -2,12 +2,10 @@ package infrastructure;
 
 import domain.GetPriceForADateService;
 import domain.NotDesambiguableException;
-import domain.Price;
 import domain.PriceException;
 import domain.PriceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,10 +38,5 @@ public class PriceController {
     } catch (NotDesambiguableException e) {
       return ResponseEntity.unprocessableEntity().build();
     }
-  }
-
-  @GetMapping("test")
-  public ResponseEntity<String> test() {
-    return ResponseEntity.ok("hello!");
   }
 }

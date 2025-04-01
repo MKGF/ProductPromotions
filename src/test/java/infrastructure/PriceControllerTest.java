@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -113,14 +114,12 @@ class PriceControllerTest {
         .andExpect(jsonPath("$.finalPrice", Matchers.is(finalPrice)));
   }
 
-  @Test
-  public void reaches() throws Exception {
-    mockMvc.perform(get("/price/test")).andExpect(status().isOk());
-  }
-
   private static String asJsonString(final Object obj) {
     try {
-      return new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsString(obj);
+      return new ObjectMapper()
+          .configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false)
+          .registerModule(new JavaTimeModule())
+          .writeValueAsString(obj);
     } catch (Exception e) {
       throw new RuntimeException(e);
     }

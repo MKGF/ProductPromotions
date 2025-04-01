@@ -3,6 +3,7 @@ package application;
 import domain.NotDesambiguableException;
 import domain.Price;
 import domain.PriceException;
+import domain.PriceNotFoundException;
 import domain.PriceRepository;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,12 +22,15 @@ public class GetPriceForADateService implements domain.GetPriceForADateService {
 
   public Price execute(LocalDateTime date) throws PriceException {
     List<Price> prices = priceRepository.findByDate(date);
+    if (prices.size() == 1) {
+      return prices.get(0);
+    }
     return prices.stream().reduce((price, otherPrice) -> {
       try {
         return price.desambiguateWith(otherPrice);
       } catch (NotDesambiguableException e) {
         throw new ConflictingPricesException(e);
       }
-    }).orElseThrow(NotDesambiguableException::new);
+    }).orElseThrow(PriceNotFoundException::new);
   }
 }

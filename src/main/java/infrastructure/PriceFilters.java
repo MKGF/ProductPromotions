@@ -1,8 +1,17 @@
 package infrastructure;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import java.time.LocalDateTime;
 
-public record PriceFilters(LocalDateTime applicationDate, Long productIdentifier, Long brandIdentifier) {
+@JsonSerialize
+public record PriceFilters(
+    @JsonSerialize(using = LocalDateTimeSerializer.class) LocalDateTime applicationDate,
+    long productIdentifier,
+    long brandIdentifier
+) {
+
+  public PriceFilters{}
 
   public LocalDateTime toDomain() {
     return applicationDate;
