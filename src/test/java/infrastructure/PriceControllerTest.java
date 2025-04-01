@@ -1,5 +1,8 @@
 package infrastructure;
 
+import static java.lang.Math.toIntExact;
+import static org.hamcrest.Matchers.anyOf;
+import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -10,9 +13,10 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Currency;
 import java.util.List;
-import org.hamcrest.Matchers;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -101,15 +105,26 @@ class PriceControllerTest {
   }
 
   @ParameterizedTest
-  @MethodSource("datesAndPrices")
-  public void givenADate_returnsCorrectPricingForListing(LocalDateTime dateFilter, String finalPrice) throws Exception {
+  @MethodSource("datesPricesAndListings")
+  public void givenADate_returnsCorrectPricingForListing(LocalDateTime dateFilter, String finalPrice, Long listing) throws Exception {
     PriceFilters filters = new PriceFilters(dateFilter, 35455L, 1L);
+    DbPrice dbPrice = priceRepository.findById(listing).get();
     mockMvc.perform(post("/price").content(asJsonString(filters))
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content()
             .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$.finalPrice", Matchers.is(finalPrice)));
+        .andExpect(jsonPath("$.finalPrice", is(finalPrice)))
+        .andExpect(jsonPath("$.productIdentifier", is(toIntExact(dbPrice.getProductId()))))
+        .andExpect(jsonPath("$.brandIdentifier", is(toIntExact(dbPrice.getBrandId()))))
+        .andExpect(jsonPath("$.listing", is(toIntExact(dbPrice.getListing()))))
+        .andExpect(jsonPath("$.startDate", is(getFormattedDate(dbPrice.getStartDate()))))
+        .andExpect(jsonPath("$.endDate",is(getFormattedDate(dbPrice.getEndDate()))));
+  }
+
+  private static String getFormattedDate(LocalDateTime date) {
+    DateTimeFormatter formatter = DateTimeFormatter.BASIC_ISO_DATE;
+    return date.format(formatter);
   }
 
   private static String asJsonString(final Object obj) {
@@ -123,13 +138,13 @@ class PriceControllerTest {
     }
   }
 
-  private static List<Arguments> datesAndPrices() {
+  private static List<Arguments> datesPricesAndListings() {
     return List.of(
-        Arguments.of(LocalDateTime.of(2020, 6, 14, 10, 0, 0), "35.50EUR"),
-        Arguments.of(LocalDateTime.of(2020, 6, 14, 16, 0, 0), "25.45EUR"),
-        Arguments.of(LocalDateTime.of(2020, 6, 14, 21, 0, 0), "35.50EUR"),
-        Arguments.of(LocalDateTime.of(2020, 6, 15, 10, 0, 0), "30.50EUR"),
-        Arguments.of(LocalDateTime.of(2020, 6, 16, 21, 0, 0), "38.95EUR")
+        Arguments.of(LocalDateTime.of(2020, 6, 14, 10, 0, 0), "35.50EUR", 1L),
+        Arguments.of(LocalDateTime.of(2020, 6, 14, 16, 0, 0), "25.45EUR", 2L),
+        Arguments.of(LocalDateTime.of(2020, 6, 14, 21, 0, 0), "35.50EUR", 1L),
+        Arguments.of(LocalDateTime.of(2020, 6, 15, 10, 0, 0), "30.50EUR", 3L),
+        Arguments.of(LocalDateTime.of(2020, 6, 16, 21, 0, 0), "38.95EUR", 4L)
     );
   }
 
