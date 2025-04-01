@@ -4,6 +4,11 @@ Esta es la solución a la prueba técnica para Inditex. A tener en cuenta a la h
 - La solución se ha implementado usando TDD, usando los 5 tests dados en el enunciado como la base para los casos de test finales, los de integración (+ casos de test que cubren el dominio y la capa de aplicación).
 - Se sobreentiende que, dado el tamaño del proyecto, no es necesario una paquetería compleja. Se ha diseñado para lucir simple, eso no quita que en un proyecto mayor, las entidades estén separadas de los dtos, del controlador etc. Pero se ha respetado el KISS en la medida de lo posible.
 
+Set up con el que se ha desarrollado:
+
+    Maven: apache-maven-3.9.6
+    Java: 17.0.11
+
 Para probarla:
 
     mvn verify
