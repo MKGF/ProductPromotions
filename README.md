@@ -4,6 +4,11 @@ Esta es la solución a la prueba técnica para Inditex. A tener en cuenta a la h
 - La solución se ha implementado usando TDD, usando los 5 tests dados en el enunciado como la base para los casos de test finales, los de integración (+ casos de test que cubren el dominio y la capa de aplicación).
 - Se sobreentiende que, dado el tamaño del proyecto, no es necesario una paquetería compleja. Se ha diseñado para lucir simple, eso no quita que en un proyecto mayor, las entidades estén separadas de los dtos, del controlador etc. Pero se ha respetado el KISS en la medida de lo posible.
 
+Para probarla:
+
+    mvn verify
+
+
 Enunciado del ejercicio:
 
 En la base de datos de comercio electrónico de la compañía disponemos de la tabla PRICES que refleja el precio final (pvp) y la tarifa que aplica a un producto de una cadena entre unas fechas determinadas. A continuación se muestra un ejemplo de la tabla con los campos relevantes:
