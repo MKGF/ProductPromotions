@@ -3,18 +3,16 @@ package application;
 import domain.NotDesambiguableException;
 import domain.Price;
 import domain.PriceException;
-import domain.PriceNotFoundException;
 import domain.PriceRepository;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class GetPriceForADateService {
+public class GetPriceForADateService implements domain.GetPriceForADateService {
 
-  private PriceRepository priceRepository;
+  private final PriceRepository priceRepository;
 
   @Autowired
   public GetPriceForADateService(PriceRepository priceRepository) {
