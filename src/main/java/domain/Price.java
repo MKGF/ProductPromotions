@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Currency;
 
-public class Price {
+public class Price implements Comparable<Price> {
 
   private Brand brand;
 
@@ -23,10 +23,19 @@ public class Price {
   private Currency currency;
 
   public Price(int priority) {
-
+    this.priority = priority;
   }
 
-  public Price desambiguateWith(Price otherPrice) {
-    return otherPrice;
+  public Price desambiguateWith(Price otherPrice) throws NotDesambiguableException {
+    return switch (this.compareTo(otherPrice)) {
+      case -1 -> otherPrice;
+      case 1 -> this;
+      default -> throw new NotDesambiguableException();
+    };
+  }
+
+  @Override
+  public int compareTo(Price other) {
+    return this.priority.compareTo(other.priority);
   }
 }
