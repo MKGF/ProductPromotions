@@ -31,6 +31,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(PriceController.class)
@@ -65,12 +66,17 @@ class PriceControllerTest {
   public void givenADate_returnsCorrectPricingForListing(LocalDateTime dateFilter, String finalPrice, Long listing) throws Exception {
     PriceFilters filters = new PriceFilters(dateFilter, 35455L, 1L);
     DbPrice dbPrice = priceRepository.findById(listing).get();
-    mockMvc.perform(post("/price").content(asJsonString(filters))
+    ResultActions resultActions = mockMvc.perform(post("/price").content(asJsonString(filters))
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content()
-            .contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-        .andExpect(jsonPath("$.finalPrice", is(finalPrice)))
+            .contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+    matchesPrice(resultActions, finalPrice, dbPrice);
+  }
+
+  private void matchesPrice(ResultActions resultActions, String finalPrice, DbPrice dbPrice)
+      throws Exception {
+    resultActions.andExpect(jsonPath("$.finalPrice", is(finalPrice)))
         .andExpect(jsonPath("$.productIdentifier", is(toIntExact(dbPrice.getProductId()))))
         .andExpect(jsonPath("$.brandIdentifier", is(toIntExact(dbPrice.getBrandId()))))
         .andExpect(jsonPath("$.listing", is(toIntExact(dbPrice.getListing()))))
