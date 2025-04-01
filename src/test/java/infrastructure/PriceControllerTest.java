@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -72,6 +73,14 @@ class PriceControllerTest {
         .andExpect(content()
             .contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
     matchesPrice(resultActions, finalPrice, dbPrice);
+  }
+
+  @Test
+  public void givenEmptyDate_returnsBadRequest() throws Exception {
+    PriceFilters filters = new PriceFilters(null, 35455L, 1L);
+    mockMvc.perform(post("/price").content(asJsonString(filters))
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isBadRequest());
   }
 
   private void matchesPrice(ResultActions resultActions, String finalPrice, DbPrice dbPrice)

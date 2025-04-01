@@ -26,6 +26,7 @@ public class PriceController {
   public ResponseEntity<PriceDto> getForADate(@RequestBody PriceFilters priceFilters)
       throws PriceException {
     try {
+      priceFilters.validate();
       return ResponseEntity.ok(
           PriceDto.fromDomain(
             getPriceForADateService.execute(priceFilters.toDomain()),
@@ -33,6 +34,8 @@ public class PriceController {
             priceFilters.brandIdentifier()
           )
       );
+    } catch (InvalidDateException e) {
+      return ResponseEntity.badRequest().build();
     } catch (PriceNotFoundException e) {
       return ResponseEntity.notFound().build();
     } catch (NotDesambiguableException e) {

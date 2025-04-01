@@ -14,4 +14,10 @@ public record PriceFilters(
   public LocalDateTime toDomain() {
     return applicationDate;
   }
+
+  public void validate() throws InvalidDateException {
+    if (applicationDate == null) {
+      throw new InvalidDateException();
+    }
+  }
 }
