@@ -52,55 +52,11 @@ class PriceControllerTest {
 
   @BeforeEach
   public void setUp() {
-    // Initialize test data before each test method
-    Long brandId = 1L;
-    Long productId = 35455L;
-    DbPrice defaultDbPrice = new DbPrice(
-        brandId,
-        LocalDateTime.of(2020, 6, 14, 0, 0, 0),
-        LocalDateTime.of(2020, 12, 31, 23, 59, 59),
-        1L,
-        productId,
-        0,
-        BigDecimal.valueOf(35.5),
-        Currency.getInstance("EUR")
-    );
-    DbPrice firstPromoDbPrice = new DbPrice(
-        brandId,
-        LocalDateTime.of(2020, 6, 14, 15, 0, 0),
-        LocalDateTime.of(2020, 6, 14, 18, 30, 0),
-        2L,
-        productId,
-        1,
-        BigDecimal.valueOf(25.45),
-        Currency.getInstance("EUR")
-    );
-    DbPrice secondPromoDbPrice = new DbPrice(
-        brandId,
-        LocalDateTime.of(2020, 6, 15, 0, 0, 0),
-        LocalDateTime.of(2020, 6, 15, 11, 0, 0),
-        3L,
-        productId,
-        1,
-        BigDecimal.valueOf(30.5),
-        Currency.getInstance("EUR")
-    );
-    DbPrice thirdPromoDbPrice = new DbPrice(
-        brandId,
-        LocalDateTime.of(2020, 6, 15, 16, 0, 0),
-        LocalDateTime.of(2020, 12, 31, 23, 59, 59),
-        4L,
-        productId,
-        1,
-        BigDecimal.valueOf(38.95),
-        Currency.getInstance("EUR")
-    );
-    priceRepository.saveAll(List.of(defaultDbPrice, firstPromoDbPrice, secondPromoDbPrice, thirdPromoDbPrice));
+    priceRepository.saveAll(getFixtures());
   }
 
   @AfterEach
   public void tearDown() {
-    // Release test data after each test method
     priceRepository.deleteAll();
   }
 
@@ -146,6 +102,52 @@ class PriceControllerTest {
         Arguments.of(LocalDateTime.of(2020, 6, 15, 10, 0, 0), "30.50EUR", 3L),
         Arguments.of(LocalDateTime.of(2020, 6, 16, 21, 0, 0), "38.95EUR", 4L)
     );
+  }
+
+  private static List<DbPrice> getFixtures() {
+    Long brandId = 1L;
+    Long productId = 35455L;
+    DbPrice defaultDbPrice = new DbPrice(
+        brandId,
+        LocalDateTime.of(2020, 6, 14, 0, 0, 0),
+        LocalDateTime.of(2020, 12, 31, 23, 59, 59),
+        1L,
+        productId,
+        0,
+        BigDecimal.valueOf(35.5),
+        Currency.getInstance("EUR")
+    );
+    DbPrice firstPromoDbPrice = new DbPrice(
+        brandId,
+        LocalDateTime.of(2020, 6, 14, 15, 0, 0),
+        LocalDateTime.of(2020, 6, 14, 18, 30, 0),
+        2L,
+        productId,
+        1,
+        BigDecimal.valueOf(25.45),
+        Currency.getInstance("EUR")
+    );
+    DbPrice secondPromoDbPrice = new DbPrice(
+        brandId,
+        LocalDateTime.of(2020, 6, 15, 0, 0, 0),
+        LocalDateTime.of(2020, 6, 15, 11, 0, 0),
+        3L,
+        productId,
+        1,
+        BigDecimal.valueOf(30.5),
+        Currency.getInstance("EUR")
+    );
+    DbPrice thirdPromoDbPrice = new DbPrice(
+        brandId,
+        LocalDateTime.of(2020, 6, 15, 16, 0, 0),
+        LocalDateTime.of(2020, 12, 31, 23, 59, 59),
+        4L,
+        productId,
+        1,
+        BigDecimal.valueOf(38.95),
+        Currency.getInstance("EUR")
+    );
+    return List.of(defaultDbPrice, firstPromoDbPrice, secondPromoDbPrice, thirdPromoDbPrice);
   }
 
 }
