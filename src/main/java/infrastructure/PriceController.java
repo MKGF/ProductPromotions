@@ -1,5 +1,6 @@
 package infrastructure;
 
+import application.ConflictingPricesException;
 import domain.GetPriceForADateService;
 import domain.NotDesambiguableException;
 import domain.PriceException;
@@ -38,7 +39,7 @@ public class PriceController {
       return ResponseEntity.badRequest().build();
     } catch (PriceNotFoundException e) {
       return ResponseEntity.notFound().build();
-    } catch (NotDesambiguableException e) {
+    } catch (ConflictingPricesException e) {
       return ResponseEntity.unprocessableEntity().build();
     }
   }
