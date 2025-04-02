@@ -83,6 +83,14 @@ class PriceControllerTest {
         .andExpect(status().isBadRequest());
   }
 
+  @Test
+  public void givenRandomNonExistingData_returnsNotFound() throws Exception {
+    PriceFilters filters = new PriceFilters(LocalDateTime.now(), 123L, 456L);
+    mockMvc.perform(post("/price").content(asJsonString(filters))
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isNotFound());
+  }
+
   private void matchesPrice(ResultActions resultActions, String finalPrice, DbPrice dbPrice)
       throws Exception {
     resultActions.andExpect(jsonPath("$.finalPrice", is(finalPrice)))
