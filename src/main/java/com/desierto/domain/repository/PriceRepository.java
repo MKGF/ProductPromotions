@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface PriceRepository {
 
-  List<Price> findByDate(LocalDateTime date);
+  Price findByDate(LocalDateTime date);
 }
