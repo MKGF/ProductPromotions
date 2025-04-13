@@ -11,6 +11,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface JpaPriceRepository extends JpaRepository<DbPrice, Long> {
 
-  @Query(value = "SELECT price FROM DbPrice price WHERE price.startDate < :date AND price.endDate > :date")
-  List<DbPrice> findByDate(@Param("date") LocalDateTime date);
+  @Query(value = "SELECT * FROM PRICES WHERE START_DATE < :date AND END_DATE > :date ORDER BY PRIORITY DESC LIMIT 1", nativeQuery = true)
+  DbPrice findByDate(@Param("date") LocalDateTime date);
 }

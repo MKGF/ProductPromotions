@@ -17,28 +17,28 @@ import lombok.Setter;
 @Setter
 public class DbPrice {
 
-  @Column
+  @Column(name = "brand")
   private Long brandId;
 
-  @Column
+  @Column(name = "startDate")
   private LocalDateTime startDate;
 
-  @Column
+  @Column(name = "endDate")
   private LocalDateTime endDate;
 
   @Id
   private final Long listing;
 
-  @Column
+  @Column(name = "product")
   private Long productId;
 
-  @Column
+  @Column(name = "priority")
   private Integer priority;
 
-  @Column
+  @Column(name = "amount")
   private BigDecimal amount;
 
-  @Column
+  @Column(name = "currency")
   private Currency currency;
 
   public DbPrice(Long brandId, LocalDateTime startDate, LocalDateTime endDate, Long listing,
