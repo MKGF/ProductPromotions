@@ -1,6 +1,7 @@
 package com.desierto.application.service;
 
 import com.desierto.domain.Price;
+import com.desierto.domain.exception.PriceNotFoundException;
 import com.desierto.domain.repository.PriceRepository;
 import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ public class GetPriceForADateService implements com.desierto.domain.service.GetP
     this.priceRepository = priceRepository;
   }
 
-  public Price execute(LocalDateTime date) {
+  public Price execute(LocalDateTime date) throws PriceNotFoundException {
     return priceRepository.findByDate(date);
   }
 }
