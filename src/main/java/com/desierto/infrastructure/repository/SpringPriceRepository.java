@@ -1,6 +1,7 @@
 package com.desierto.infrastructure.repository;
 
 import com.desierto.domain.Price;
+import com.desierto.domain.exception.PriceNotFoundException;
 import com.desierto.domain.repository.PriceRepository;
 import com.desierto.infrastructure.entity.DbPrice;
 import java.time.LocalDateTime;
@@ -20,7 +21,11 @@ public class SpringPriceRepository implements PriceRepository {
   }
 
   @Override
-  public List<Price> findByDate(LocalDateTime date) {
-    return jpaPriceRepository.findByDate(date).stream().map(DbPrice::toDomain).collect(Collectors.toList());
+  public Price findByDate(LocalDateTime date) throws PriceNotFoundException {
+    try {
+      return jpaPriceRepository.findByDate(date).toDomain();
+    } catch (NullPointerException e) {
+      throw new PriceNotFoundException();
+    }
   }
 }

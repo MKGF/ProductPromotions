@@ -100,29 +100,6 @@ class PriceControllerTest {
         .andExpect(status().isNotFound());
   }
 
-  @Test
-  void givenConflictingData_returnsUnprocessableEntity() throws Exception {
-    DbPrice conflictingDbPrice = new DbPrice(
-        1L,
-        LocalDateTime.of(2020, 6, 14, 15, 0, 0),
-        LocalDateTime.of(2020, 6, 14, 18, 30, 0),
-        5L,
-        35455L,
-        1,
-        BigDecimal.valueOf(25.45),
-        Currency.getInstance("EUR")
-    );
-    priceRepository.save(conflictingDbPrice);
-    PriceFilters filters = new PriceFilters(LocalDateTime.of(2020, 6, 14, 16, 0, 0), 35455L, 1L);
-    mockMvc.perform(
-            get("/price")
-                .param("applicationDate", filters.applicationDate().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
-                .param("productIdentifier", String.valueOf(filters.productIdentifier()))
-                .param("brandIdentifier", String.valueOf(filters.brandIdentifier()))
-                .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().isUnprocessableEntity());
-  }
-
   private void matchesPrice(ResultActions resultActions, String finalPrice, DbPrice dbPrice)
       throws Exception {
     resultActions.andExpect(jsonPath("$.finalPrice", is(finalPrice)))

@@ -1,11 +1,10 @@
 package com.desierto.domain;
 
-import com.desierto.domain.exception.NotDesambiguableException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Currency;
 
-public class Price implements Comparable<Price> {
+public class Price {
 
   private LocalDateTime startDate;
 
@@ -51,18 +50,5 @@ public class Price implements Comparable<Price> {
 
   public Currency getCurrency() {
     return currency;
-  }
-
-  public Price desambiguateWith(Price otherPrice) throws NotDesambiguableException {
-    return switch (this.compareTo(otherPrice)) {
-      case -1 -> otherPrice;
-      case 1 -> this;
-      default -> throw new NotDesambiguableException();
-    };
-  }
-
-  @Override
-  public int compareTo(Price other) {
-    return this.priority.compareTo(other.priority);
   }
 }
