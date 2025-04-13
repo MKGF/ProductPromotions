@@ -50,18 +50,18 @@ class PriceControllerTest {
   }
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     priceRepository.saveAll(getFixtures());
   }
 
   @AfterEach
-  public void tearDown() {
+  void tearDown() {
     priceRepository.deleteAll();
   }
 
   @ParameterizedTest
   @MethodSource("datesPricesAndListings")
-  public void givenADate_returnsCorrectPricingForListing(LocalDateTime dateFilter, String finalPrice, Long listing) throws Exception {
+  void givenADate_returnsCorrectPricingForListing(LocalDateTime dateFilter, String finalPrice, Long listing) throws Exception {
     PriceFilters filters = new PriceFilters(dateFilter, 35455L, 1L);
     DbPrice dbPrice = priceRepository.findById(listing).get();
     ResultActions resultActions = mockMvc.perform(
@@ -77,7 +77,7 @@ class PriceControllerTest {
   }
 
   @Test
-  public void givenEmptyDate_returnsBadRequest() throws Exception {
+  void givenEmptyDate_returnsBadRequest() throws Exception {
     PriceFilters filters = new PriceFilters(null, 35455L, 1L);
     mockMvc.perform(
             get("/price")
@@ -89,7 +89,7 @@ class PriceControllerTest {
   }
 
   @Test
-  public void givenRandomNonExistingData_returnsNotFound() throws Exception {
+  void givenRandomNonExistingData_returnsNotFound() throws Exception {
     PriceFilters filters = new PriceFilters(LocalDateTime.now(), 123L, 456L);
     mockMvc.perform(
             get("/price")
@@ -101,7 +101,7 @@ class PriceControllerTest {
   }
 
   @Test
-  public void givenConflictingData_returnsUnprocessableEntity() throws Exception {
+  void givenConflictingData_returnsUnprocessableEntity() throws Exception {
     DbPrice conflictingDbPrice = new DbPrice(
         1L,
         LocalDateTime.of(2020, 6, 14, 15, 0, 0),

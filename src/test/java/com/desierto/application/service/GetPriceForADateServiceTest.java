@@ -26,12 +26,12 @@ class GetPriceForADateServiceTest {
   GetPriceForADateService cut;
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     cut = new GetPriceForADateService(priceRepository);
   }
 
   @Test
-  public void givenADate_forVariousPrices_returnsAPrice() throws PriceException {
+  void givenADate_forVariousPrices_returnsAPrice() throws PriceException {
     // Given
     Price aHighPriorityPrice = new Price(3);
     Price aLowerPriorityPrice = new Price(2);
@@ -48,7 +48,7 @@ class GetPriceForADateServiceTest {
   }
 
   @Test
-  public void givenADate_forNoPrices_throwsException() {
+  void givenADate_forNoPrices_throwsException() {
     // Given
     List<Price> prices = List.of();
     when(priceRepository.findByDate(any())).thenReturn(prices);
@@ -58,7 +58,7 @@ class GetPriceForADateServiceTest {
   }
 
   @Test
-  public void givenADate_forVariousPricesWithSamePriority_throwsException() {
+  void givenADate_forVariousPricesWithSamePriority_throwsException() {
     // Given
     Price aHighPriorityPrice = new Price(3);
     Price anotherHighPriorityPrice = new Price(3);
@@ -72,7 +72,7 @@ class GetPriceForADateServiceTest {
   }
 
   @Test
-  public void givenADate_forAPrice_returnsAPrice() throws PriceException {
+  void givenADate_forAPrice_returnsAPrice() throws PriceException {
     // Given
     Price aPrice = new Price(1);
     List<Price> prices = List.of(aPrice);

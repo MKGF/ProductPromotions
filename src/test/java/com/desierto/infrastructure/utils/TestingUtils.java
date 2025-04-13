@@ -17,17 +17,6 @@ public class TestingUtils {
     return date.format(formatter);
   }
 
-  public static String asJsonString(final Object obj) {
-    try {
-      return new ObjectMapper()
-          .configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false)
-          .registerModule(new JavaTimeModule())
-          .writeValueAsString(obj);
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
-  }
-
   public static List<DbPrice> getFixtures() {
     Long brandId = 1L;
     Long productId = 35455L;
