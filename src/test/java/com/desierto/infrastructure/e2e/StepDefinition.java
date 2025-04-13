@@ -1,6 +1,5 @@
 package com.desierto.infrastructure.e2e;
 
-import static com.desierto.infrastructure.utils.TestingUtils.asJsonString;
 import static com.desierto.infrastructure.utils.TestingUtils.getFixtures;
 import static java.time.LocalDateTime.parse;
 import static org.hamcrest.Matchers.is;
@@ -24,7 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 
-public class CucumberGlue {
+public class StepDefinition {
 
   private Long brand;
 
@@ -40,7 +39,7 @@ public class CucumberGlue {
   @Autowired
   private JpaPriceRepository priceRepository;
 
-  public CucumberGlue() {}
+  public StepDefinition() {}
 
   @Given("a product")
   public void aProduct() {

@@ -13,6 +13,6 @@ import org.junit.platform.suite.api.Suite;
 @SelectClasspathResource("features")
 @ConfigurationParameter(key = GLUE_PROPERTY_NAME, value = "com.desierto.infrastructure.e2e")
 @ConfigurationParameter(key = PLUGIN_PROPERTY_NAME, value = "pretty")
-public class CucumberIntegrationTest {
+public class PricesE2ETests {
 
 }
