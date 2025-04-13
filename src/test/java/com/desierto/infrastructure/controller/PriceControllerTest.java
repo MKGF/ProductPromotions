@@ -1,11 +1,10 @@
 package com.desierto.infrastructure.controller;
 
-import static com.desierto.infrastructure.utils.TestingUtils.asJsonString;
 import static com.desierto.infrastructure.utils.TestingUtils.getFixtures;
 import static com.desierto.infrastructure.utils.TestingUtils.getFormattedDate;
 import static java.lang.Math.toIntExact;
 import static org.hamcrest.Matchers.is;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -14,6 +13,7 @@ import com.desierto.infrastructure.entity.DbPrice;
 import com.desierto.infrastructure.repository.JpaPriceRepository;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Currency;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
@@ -64,8 +64,12 @@ class PriceControllerTest {
   public void givenADate_returnsCorrectPricingForListing(LocalDateTime dateFilter, String finalPrice, Long listing) throws Exception {
     PriceFilters filters = new PriceFilters(dateFilter, 35455L, 1L);
     DbPrice dbPrice = priceRepository.findById(listing).get();
-    ResultActions resultActions = mockMvc.perform(post("/price").content(asJsonString(filters))
-            .contentType(MediaType.APPLICATION_JSON))
+    ResultActions resultActions = mockMvc.perform(
+            get("/price")
+                .queryParam("applicationDate", filters.applicationDate().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+                .queryParam("productIdentifier", String.valueOf(filters.productIdentifier()))
+                .queryParam("brandIdentifier", String.valueOf(filters.brandIdentifier()))
+                .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content()
             .contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
@@ -75,16 +79,24 @@ class PriceControllerTest {
   @Test
   public void givenEmptyDate_returnsBadRequest() throws Exception {
     PriceFilters filters = new PriceFilters(null, 35455L, 1L);
-    mockMvc.perform(post("/price").content(asJsonString(filters))
-            .contentType(MediaType.APPLICATION_JSON))
+    mockMvc.perform(
+            get("/price")
+                .queryParam("applicationDate", "")
+                .queryParam("productIdentifier", String.valueOf(filters.productIdentifier()))
+                .queryParam("brandIdentifier", String.valueOf(filters.brandIdentifier()))
+                .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isBadRequest());
   }
 
   @Test
   public void givenRandomNonExistingData_returnsNotFound() throws Exception {
     PriceFilters filters = new PriceFilters(LocalDateTime.now(), 123L, 456L);
-    mockMvc.perform(post("/price").content(asJsonString(filters))
-            .contentType(MediaType.APPLICATION_JSON))
+    mockMvc.perform(
+            get("/price")
+                .queryParam("applicationDate", filters.applicationDate().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+                .queryParam("productIdentifier", String.valueOf(filters.productIdentifier()))
+                .queryParam("brandIdentifier", String.valueOf(filters.brandIdentifier()))
+                .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNotFound());
   }
 
@@ -102,8 +114,12 @@ class PriceControllerTest {
     );
     priceRepository.save(conflictingDbPrice);
     PriceFilters filters = new PriceFilters(LocalDateTime.of(2020, 6, 14, 16, 0, 0), 35455L, 1L);
-    mockMvc.perform(post("/price").content(asJsonString(filters))
-            .contentType(MediaType.APPLICATION_JSON))
+    mockMvc.perform(
+            get("/price")
+                .param("applicationDate", filters.applicationDate().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+                .param("productIdentifier", String.valueOf(filters.productIdentifier()))
+                .param("brandIdentifier", String.valueOf(filters.brandIdentifier()))
+                .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isUnprocessableEntity());
   }
 

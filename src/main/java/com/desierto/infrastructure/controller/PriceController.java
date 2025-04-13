@@ -7,6 +7,7 @@ import com.desierto.domain.exception.PriceNotFoundException;
 import com.desierto.infrastructure.exception.InvalidDateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,8 +24,8 @@ public class PriceController {
     this.getPriceForADateService = getPriceForADateService;
   }
 
-  @PostMapping
-  public ResponseEntity<PriceDto> getForADate(@RequestBody PriceFilters priceFilters)
+  @GetMapping
+  public ResponseEntity<PriceDto> getForADate(PriceFilters priceFilters)
       throws PriceException {
     try {
       priceFilters.validate();
