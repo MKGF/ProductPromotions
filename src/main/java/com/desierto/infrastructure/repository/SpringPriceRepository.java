@@ -20,7 +20,7 @@ public class SpringPriceRepository implements PriceRepository {
   }
 
   @Override
-  public List<Price> findByDate(LocalDateTime date) {
-    return jpaPriceRepository.findByDate(date).stream().map(DbPrice::toDomain).collect(Collectors.toList());
+  public Price findByDate(LocalDateTime date) {
+    return jpaPriceRepository.findByDate(date).toDomain();
   }
 }

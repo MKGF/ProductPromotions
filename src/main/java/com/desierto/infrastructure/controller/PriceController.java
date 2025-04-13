@@ -1,6 +1,5 @@
 package com.desierto.infrastructure.controller;
 
-import com.desierto.application.exception.ConflictingPricesException;
 import com.desierto.domain.service.GetPriceForADateService;
 import com.desierto.domain.exception.PriceException;
 import com.desierto.domain.exception.PriceNotFoundException;
@@ -39,8 +38,6 @@ public class PriceController {
       return ResponseEntity.badRequest().build();
     } catch (PriceNotFoundException e) {
       return ResponseEntity.notFound().build();
-    } catch (ConflictingPricesException e) {
-      return ResponseEntity.unprocessableEntity().build();
     }
   }
 }
