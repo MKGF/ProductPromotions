@@ -4,6 +4,7 @@ import static com.desierto.infrastructure.utils.TestingUtils.asJsonString;
 import static com.desierto.infrastructure.utils.TestingUtils.getFixtures;
 import static java.time.LocalDateTime.parse;
 import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -59,7 +60,11 @@ public class CucumberGlue {
   public void findingOutTheCorrectPrice() throws Exception {
     DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd-HH:mm:ss");
     PriceFilters filters = new PriceFilters(parse(date, dateTimeFormatter), 35455L, 1L);
-    result = mockMvc.perform(post("/price").content(asJsonString(filters))
+    result = mockMvc.perform(
+        get("/price")
+        .queryParam("applicationDate", filters.applicationDate().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))
+        .queryParam("productIdentifier", String.valueOf(filters.productIdentifier()))
+        .queryParam("brandIdentifier", String.valueOf(filters.brandIdentifier()))
         .contentType(MediaType.APPLICATION_JSON));
   }
 
